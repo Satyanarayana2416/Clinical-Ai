@@ -1,0 +1,41 @@
+{
+    "pat_1": {
+        "patient_id": "pat_1",
+        "name": "Rajesh Sharma",
+        "preferred_language": "Hindi",
+        "preferred_doctor": "doc_1",
+        "preferred_hospital": "City Cardiology Center",
+        "past_appointments": [
+            {
+                "date": "2026-04-10",
+                "doctor_name": "Dr. Aarav Patel",
+                "status": "completed"
+            }
+        ],
+        "notes": "Patient has mild hypertension. Prefers Hindi conversations."
+    },
+    "pat_2": {
+        "patient_id": "pat_2",
+        "name": "Meena Krishnan",
+        "preferred_language": "Tamil",
+        "preferred_doctor": "doc_2",
+        "preferred_hospital": "Apollo Children Clinic",
+        "past_appointments": [],
+        "notes": "Prefers Tamil. Standard monthly checkup for child."
+    },
+    "pat_3": {
+        "patient_id": "pat_3",
+        "name": "John Doe",
+        "preferred_language": "English",
+        "preferred_doctor": "doc_4",
+        "preferred_hospital": "General Wellness Clinic",
+        "past_appointments": [
+            {
+                "date": "2026-03-05",
+                "doctor_name": "Dr. Vikram Sen",
+                "status": "completed"
+            }
+        ],
+        "notes": "Prefers English. Routine physicals."
+    }
+}

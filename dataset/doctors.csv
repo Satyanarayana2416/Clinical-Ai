@@ -1,0 +1,5 @@
+doctor_id,doctor_name,specialty,languages
+doc_1,Dr. Aarav Patel,Cardiologist,English|Hindi
+doc_2,Dr. Priya Sharma,Pediatrician,English|Hindi|Tamil
+doc_3,Dr. Ananya Nair,Dermatologist,English|Tamil
+doc_4,Dr. Vikram Sen,General Physician,English|Hindi
