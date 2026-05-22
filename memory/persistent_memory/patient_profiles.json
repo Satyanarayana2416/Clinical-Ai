@@ -37,5 +37,14 @@
             }
         ],
         "notes": "Prefers English. Routine physicals."
+    },
+    "user_1779443337264": {
+        "patient_id": "user_1779443337264",
+        "name": "Satya Test",
+        "preferred_language": "English",
+        "preferred_doctor": "doc_1",
+        "preferred_hospital": "City Cardiology Center",
+        "past_appointments": [],
+        "notes": "Registered User from Rajahmundry Test, Age: 20"
     }
 }

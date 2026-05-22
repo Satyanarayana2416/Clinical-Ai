@@ -21,8 +21,16 @@ def init_redis():
         _redis_client = None
         return
     try:
-        # Default connection string, low timeout to avoid blocking
-        _redis_client = redis.Redis(host='localhost', port=6379, db=0, socket_timeout=1.0, decode_responses=True)
+        # Support dynamic REDIS_URL environment variable (e.g. on Render)
+        import os
+        redis_url = os.environ.get("REDIS_URL")
+        if redis_url:
+            _redis_client = redis.Redis.from_url(redis_url, socket_timeout=1.0, decode_responses=True)
+            logger.info("Connecting to Redis via REDIS_URL environment variable.")
+        else:
+            _redis_client = redis.Redis(host='localhost', port=6379, db=0, socket_timeout=1.0, decode_responses=True)
+            logger.info("Connecting to Redis via local defaults.")
+            
         # Test connection
         _redis_client.ping()
         logger.info("Successfully connected to Redis.")

@@ -6,7 +6,10 @@ from backend.controllers.appointments import (
     book_appointment_controller,
     reschedule_appointment_controller,
     cancel_appointment_controller,
-    get_patient_profile_controller
+    get_patient_profile_controller,
+    register_user_controller,
+    check_user_controller,
+    get_all_users_controller
 )
 import os
 
@@ -55,3 +58,16 @@ def update_api_key(payload: dict = Body(...)):
         except Exception as e:
             return {"status": "error", "message": f"Failed setting API key: {str(e)}"}
     return {"status": "error", "message": "API key cannot be empty."}
+
+@router.post("/register")
+def register_user(payload: dict = Body(...)):
+    return register_user_controller(payload)
+
+@router.get("/user/{user_id}")
+def check_user(user_id: str):
+    return check_user_controller(user_id)
+
+@router.get("/users")
+def get_all_users():
+    return get_all_users_controller()
+

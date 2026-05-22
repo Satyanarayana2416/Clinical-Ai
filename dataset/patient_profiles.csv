@@ -2,3 +2,4 @@ patient_id,name,preferred_language,preferred_doctor,preferred_hospital,notes,pas
 pat_1,Rajesh Sharma,Hindi,doc_1,City Cardiology Center,Patient has mild hypertension. Prefers Hindi conversations.,"[{""date"":""2026-04-10"",""doctor_name"":""Dr. Aarav Patel"",""status"":""completed""}]"
 pat_2,Meena Krishnan,Tamil,doc_2,Apollo Children Clinic,Prefers Tamil. Standard monthly checkup for child.,[]
 pat_3,John Doe,English,doc_4,General Wellness Clinic,Prefers English. Routine physicals.,"[{""date"":""2026-03-05"",""doctor_name"":""Dr. Vikram Sen"",""status"":""completed""}]"
+user_1779419006852,Purnith,English,doc_1,City Cardiology Center,"Registered User from Rajam, Age: 18",[]
