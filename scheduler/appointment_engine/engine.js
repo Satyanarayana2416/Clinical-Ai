@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const dbStore = require('./db_store');
+const dbMemory = require('../../memory/persistent_memory/db_memory');
 
 function validateDateTime(dateStr, timeStr) {
     try {
@@ -121,10 +122,13 @@ function bookAppointment(patientId, doctorId, dateStr, timeStr) {
     }
 
     const doctor = db.doctors.find(d => d.doctor_id === doctorId);
+    const profile = dbMemory.getPatientProfile(patientId);
+    const patientName = profile ? profile.name : "";
 
     const app = {
         id: `app_${crypto.randomBytes(4).toString('hex')}`,
         patient_id: patientId,
+        patient_name: patientName,
         doctor_id: doctorId,
         doctor_name: doctor ? doctor.doctor_name : "Unknown Doctor",
         date: dateStr,

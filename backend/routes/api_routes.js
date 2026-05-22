@@ -20,6 +20,7 @@ function handleApiRoutes(req, res) {
         return true;
     }
 
+    // ===== Clinical Data APIs =====
     if (url === '/api/doctors' && method === 'GET') {
         controllers.handleGetDoctors(req, res);
         return true;
@@ -47,6 +48,21 @@ function handleApiRoutes(req, res) {
         return true;
     }
 
+    // ===== User Registration APIs =====
+    else if (url === '/api/register' && method === 'POST') {
+        controllers.handleRegisterUser(req, res);
+        return true;
+    }
+    else if (url.startsWith('/api/user/') && method === 'GET') {
+        const userId = url.split('/').pop();
+        controllers.handleCheckUser(req, res, userId);
+        return true;
+    }
+    else if (url === '/api/users' && method === 'GET') {
+        controllers.handleGetAllUsers(req, res);
+        return true;
+    }
+
     return false; // Not handled, fall back to static file server
 }
 
@@ -70,6 +86,7 @@ function serveStaticFiles(req, res) {
             else if (filePath.endsWith('.js')) contentType = 'text/javascript';
             else if (filePath.endsWith('.png')) contentType = 'image/png';
             else if (filePath.endsWith('.svg')) contentType = 'image/svg+xml';
+            else if (filePath.endsWith('.ico')) contentType = 'image/x-icon';
             
             res.writeHead(200, { 'Content-Type': contentType });
             res.end(content);

@@ -4,6 +4,7 @@ const csvHelper = require('../../scheduler/appointment_engine/csv_helper');
 
 const DATA_DIR = path.join(__dirname, '..', '..', 'dataset');
 const MEM_CSV = path.join(DATA_DIR, 'patient_profiles.csv');
+const USERS_CSV = path.join(DATA_DIR, 'registered_users.csv');
 
 const DEFAULT_PROFILES = {
     "pat_1": {
@@ -59,7 +60,29 @@ function getPatientProfile(patientId) {
     initProfiles();
     try {
         const rows = csvHelper.readCsvFile(MEM_CSV);
-        const row = rows.find(r => r.patient_id === patientId);
+        let row = rows.find(r => r.patient_id === patientId);
+        
+        // Auto-create profile from registered_users.csv if found
+        if (!row && fs.existsSync(USERS_CSV)) {
+            const users = csvHelper.readCsvFile(USERS_CSV);
+            const user = users.find(u => u.user_id === patientId);
+            if (user) {
+                const newProfile = {
+                    patient_id: user.user_id,
+                    name: user.name,
+                    preferred_language: "English",
+                    preferred_doctor: "doc_1",
+                    preferred_hospital: "City Cardiology Center",
+                    notes: `Registered User from ${user.place}, Age: ${user.age}`,
+                    past_appointments: "[]"
+                };
+                rows.push(newProfile);
+                csvHelper.writeCsvFile(MEM_CSV, HEADERS, rows);
+                row = newProfile;
+                console.log(`[Database] Auto-created patient profile for registered user: ${user.name} (${user.user_id})`);
+            }
+        }
+
         if (!row) return null;
 
         let pastAppts = [];

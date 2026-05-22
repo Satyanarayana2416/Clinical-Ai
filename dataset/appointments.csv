@@ -1,2 +1,4 @@
 id,patient_id,patient_name,doctor_id,doctor_name,date,time,status
 app_609b209e,pat_1,,doc_1,Dr. Aarav Patel,2026-05-22,02:00 PM,cancelled
+app_790e2dc2,pat_3,,doc_4,Dr. Vikram Sen,2026-05-25,11:00 AM,booked
+app_ed6a71b6,pat_1,Rajesh Sharma,doc_1,Dr. Aarav Patel,2026-05-23,02:00 PM,cancelled

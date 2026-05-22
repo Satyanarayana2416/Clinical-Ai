@@ -31,7 +31,7 @@ async function runAgentReasoning(text, sessionState, patientProfile, apiKey) {
         });
         
         try {
-            const result = await executeGeminiToolCalling(text, sessionState, systemPrompt, bookingTools.TOOL_SCHEMAS, patientId, apiKey, reasoningTrace);
+            const result = await executeGeminiToolCalling(text, sessionState, systemPrompt, bookingTools.TOOL_SCHEMAS, patientProfile, apiKey, reasoningTrace);
             reply = result.reply;
             actionResult = result.actionResult;
         } catch (e) {
@@ -65,16 +65,20 @@ async function runAgentReasoning(text, sessionState, patientProfile, apiKey) {
 /**
  * Genuine Gemini API REST Multi-turn Tool-calling Loop
  */
-async function executeGeminiToolCalling(text, sessionState, systemPrompt, toolSchemas, patientId, apiKey, reasoningTrace) {
+async function executeGeminiToolCalling(text, sessionState, systemPrompt, toolSchemas, patientProfile, apiKey, reasoningTrace) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
     
+    const patientId = patientProfile ? patientProfile.patient_id : "pat_1";
+    const patientName = patientProfile ? patientProfile.name : "Patient";
+    const patientDetails = `Patient Name: ${patientName}, Patient ID: ${patientId}`;
+
     // Build Gemini history
     if (!sessionState.history) sessionState.history = [];
     
-    // Add current user turn
+    // Add current user turn with patient details for personalization
     sessionState.history.push({
         role: "user",
-        parts: [{ text: `Patient Statement: "${text}" (Current Patient ID: ${patientId}). Make a tool call if they request scheduling actions.` }]
+        parts: [{ text: `Patient Statement: "${text}" (Context: ${patientDetails}). Make a tool call if they request scheduling actions. Greet them by their name: ${patientName}.` }]
     });
 
     // We keep history length under control

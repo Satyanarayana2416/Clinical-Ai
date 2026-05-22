@@ -3,258 +3,334 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clinical Voice AI Agent - Real-Time Multilingual Scheduler</title>
+    <title>AURA Voice AI — Clinical Appointment Intelligence</title>
+    <meta name="description" content="Real-time multilingual voice AI agent for clinical appointment booking with sub-450ms latency">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Header containing logo and server state indicators -->
-    <header>
-        <div class="logo-container">
-            <div class="logo-icon">AI</div>
-            <div class="logo-text">
-                <h1>AURA Voice</h1>
-                <p>Clinical Voice AI & Scheduler</p>
+    <!-- ============ LANDING PAGE ============ -->
+    <div id="landing-page">
+        <canvas id="particle-canvas"></canvas>
+        
+        <div class="landing-content">
+            <div class="landing-logo" style="animation-delay: 0s">
+                <span>AI</span>
+            </div>
+            <h1 class="landing-title fade-in-up" style="animation-delay: 0.2s">AURA Voice</h1>
+            <p class="landing-subtitle fade-in-up" style="animation-delay: 0.4s">Clinical Intelligence Platform</p>
+            <p class="landing-tagline fade-in-up" style="animation-delay: 0.6s">
+                Experience next-generation AI-powered clinical appointment management with real-time multilingual voice interaction, intelligent scheduling, and sub-450ms response latency.
+            </p>
+            
+            <div class="landing-features fade-in-up" style="animation-delay: 0.8s">
+                <div class="feature-pill">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+                    <span>Voice AI Agent</span>
+                </div>
+                <div class="feature-pill">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span>&lt; 450ms Latency</span>
+                </div>
+                <div class="feature-pill">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+                    <span>Multilingual</span>
+                </div>
+            </div>
+            
+            <button class="get-started-btn fade-in-up" id="get-started-btn" style="animation-delay: 1s">
+                <span class="btn-shimmer"></span>
+                Get Started
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+        </div>
+        
+        <!-- Floating orbs for ambient effect -->
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+    </div>
+
+    <!-- ============ REGISTRATION MODAL ============ -->
+    <div id="registration-modal">
+        <div class="registration-card">
+            <div class="reg-logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h2 class="reg-title">Create Your Profile</h2>
+            <p class="reg-subtitle">Enter your details to begin your personalized clinical AI experience</p>
+            
+            <form id="registration-form" autocomplete="off">
+                <div class="form-group">
+                    <label for="reg-name">Full Name</label>
+                    <input type="text" id="reg-name" class="form-input" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-place">City / Location</label>
+                    <input type="text" id="reg-place" class="form-input" placeholder="Enter your city" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-age">Age</label>
+                    <input type="number" id="reg-age" class="form-input" placeholder="Enter your age" min="1" max="120" required>
+                </div>
+                <button type="submit" class="reg-submit-btn" id="reg-submit-btn">
+                    <span>Continue to Dashboard</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============ DASHBOARD ============ -->
+    <div id="dashboard-page" style="display: none;">
+        
+        <!-- Dashboard Header -->
+        <header id="dashboard-header">
+            <div class="logo-container">
+                <div class="logo-icon">AI</div>
+                <div class="logo-text">
+                    <h1>AURA Voice</h1>
+                    <p>Clinical Voice AI & Scheduler</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="server-status">
+                    <div class="status-dot" id="server-status-dot"></div>
+                    <span id="server-status-text">Connecting...</span>
+                </div>
+                <div class="user-welcome" id="user-welcome">
+                    <div class="user-avatar" id="user-avatar">U</div>
+                    <span class="user-name" id="user-name-display">User</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-chip">
+                <div class="stat-icon stat-icon-doctors">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="stat-doctors">4</span>
+                    <span class="stat-label">Doctors</span>
+                </div>
+            </div>
+            <div class="stat-chip">
+                <div class="stat-icon stat-icon-appointments">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="stat-appointments">0</span>
+                    <span class="stat-label">Bookings</span>
+                </div>
+            </div>
+            <div class="stat-chip">
+                <div class="stat-icon stat-icon-latency">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="stat-latency">&lt;450ms</span>
+                    <span class="stat-label">Avg Latency</span>
+                </div>
+            </div>
+            <div class="stat-chip">
+                <div class="stat-icon stat-icon-languages">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value">3</span>
+                    <span class="stat-label">Languages</span>
+                </div>
             </div>
         </div>
-        <div class="server-status">
-            <div class="status-dot" id="server-status-dot"></div>
-            <span id="server-status-text">Websocket: Connected</span>
-        </div>
-    </header>
 
-    <!-- Main Grid Dashboard layout -->
-    <div class="dashboard-container">
-        
-        <!-- Left Panel: Voice AI Engine & Latency SLA meters -->
-        <div class="left-panel">
-            <div class="glass-card">
-                <div class="section-title">
-                    <span>Voice AI Receptionist Console</span>
-                    <small style="color: var(--text-muted); font-size: 11px;">Active Session</small>
-                </div>
-                
-                <div class="voice-interface-wrapper">
-                    <!-- Patient context selection -->
-                    <div class="patient-selector">
-                        <label for="patient-select">Selected Patient (Memory Anchor)</label>
-                        <select id="patient-select" class="custom-select">
-                            <option value="pat_1" selected>Rajesh Sharma (Prefers Hindi - Dr. Aarav Patel)</option>
-                            <option value="pat_2">Meena Krishnan (Prefers Tamil - Dr. Priya Sharma)</option>
-                            <option value="pat_3">John Doe (Prefers English - Dr. Vikram Sen)</option>
-                        </select>
-                    </div>
-
-                    <!-- Recording console -->
-                    <div class="mic-console" id="mic-console">
-                        <div class="mic-ring"></div>
-                        <div class="mic-pulse"></div>
-                        <button class="mic-btn" id="mic-btn" title="Click to Talk">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
-                            </svg>
-                        </button>
+        <!-- Main Dashboard Grid -->
+        <div class="dashboard-container">
+            
+            <!-- Left Panel -->
+            <div class="left-panel">
+                <!-- Voice AI Console -->
+                <div class="glass-card card-glow">
+                    <div class="section-title">
+                        <span>Voice AI Receptionist Console</span>
+                        <div class="live-badge"><div class="live-dot"></div>Live</div>
                     </div>
                     
-                    <div class="voice-status-text" id="voice-status">Click mic to start clinical voice booking</div>
-                    
-                    <!-- Reacting Waveform Canvas -->
-                    <canvas class="canvas-waveform" id="waveform-canvas"></canvas>
-                    
-                    <!-- Dialog Transcript box -->
-                    <div class="live-transcript-box" id="transcript-box">
-                        <div class="chat-bubble assistant">
-                            <div class="bubble-meta">
-                                <span>AURA AI Receptionist</span>
+                    <div class="voice-interface-wrapper">
+                        <div class="patient-selector">
+                            <label for="patient-select">Active Patient Profile</label>
+                            <select id="patient-select" class="custom-select">
+                                <option value="pat_1" selected>Rajesh Sharma (Hindi — Dr. Aarav Patel)</option>
+                                <option value="pat_2">Meena Krishnan (Tamil — Dr. Priya Sharma)</option>
+                                <option value="pat_3">John Doe (English — Dr. Vikram Sen)</option>
+                            </select>
+                        </div>
+
+                        <div class="mic-console" id="mic-console">
+                            <div class="mic-ring mic-ring-1"></div>
+                            <div class="mic-ring mic-ring-2"></div>
+                            <div class="mic-ring mic-ring-3"></div>
+                            <button class="mic-btn" id="mic-btn" title="Click to Talk">
+                                <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+                            </button>
+                        </div>
+                        
+                        <div class="voice-status-text" id="voice-status">Click the mic to start voice booking</div>
+                        
+                        <canvas class="canvas-waveform" id="waveform-canvas"></canvas>
+                        
+                        <div class="live-transcript-box" id="transcript-box">
+                            <div class="chat-bubble assistant slide-in-left">
+                                <div class="bubble-meta"><span>AURA AI Receptionist</span></div>
+                                <div class="bubble-content">
+                                    Hello! Welcome to Apollo Medical Center. I am your AI receptionist. How can I help you manage your clinical appointments today?
+                                </div>
                             </div>
-                            <div class="bubble-content">
-                                Hello! Welcome to Apollo Medical Center. I am your AI receptionist. How can I help you manage your clinical appointments today?
+                        </div>
+                        
+                        <div class="query-input-box">
+                            <div class="config-input-flex">
+                                <input type="text" id="text-query-input" class="text-input" placeholder="Type a message (e.g. 'Book with Dr Patel on Friday 2 PM')...">
+                                <button id="send-query-btn" class="submit-btn">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                                </button>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Manual keyboard query option -->
-                    <div class="query-input-box">
+                </div>
+
+                <!-- Latency SLA Card -->
+                <div class="glass-card" style="margin-top: 20px;">
+                    <div class="section-title">
+                        <span>Performance Metrics & SLA</span>
+                        <small class="target-badge">Target: &lt; 450ms</small>
+                    </div>
+                    <div class="latency-dashboard">
+                        <div class="latency-timeline">
+                            <div class="timeline-row"><span class="timeline-label">Speech-To-Text</span><div class="timeline-bar-wrapper"><div class="timeline-bar stt" id="bar-stt" style="width: 0%;"></div></div><span class="timeline-val" id="val-stt">0 ms</span></div>
+                            <div class="timeline-row"><span class="timeline-label">Language Detect</span><div class="timeline-bar-wrapper"><div class="timeline-bar lang" id="bar-lang" style="width: 0%;"></div></div><span class="timeline-val" id="val-lang">0 ms</span></div>
+                            <div class="timeline-row"><span class="timeline-label">Agent LLM & Tools</span><div class="timeline-bar-wrapper"><div class="timeline-bar llm" id="bar-llm" style="width: 0%;"></div></div><span class="timeline-val" id="val-llm">0 ms</span></div>
+                            <div class="timeline-row"><span class="timeline-label">Text-To-Speech</span><div class="timeline-bar-wrapper"><div class="timeline-bar tts" id="bar-tts" style="width: 0%;"></div></div><span class="timeline-val" id="val-tts">0 ms</span></div>
+                        </div>
+                        <div class="sla-badge-box">
+                            <span class="sla-status-text">Total Latency</span>
+                            <div class="sla-value" id="total-latency-val">0ms</div>
+                            <div class="sla-compliant" id="sla-badge">SLA Compliant</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Calendar -->
+                <div class="glass-card calendar-widget card-glow">
+                    <div class="section-title">
+                        <span>Clinical Schedules & Slots</span>
+                        <div class="live-badge" style="background: rgba(6,214,160,0.1); border-color: var(--secondary); color: var(--secondary);"><div class="live-dot" style="background: var(--secondary);"></div>Synced</div>
+                    </div>
+                    <div class="doctor-filter-tabs" id="doctor-tabs"></div>
+                    <div class="schedule-grid-container" id="schedule-grid"></div>
+                </div>
+                
+                <!-- Active Bookings -->
+                <div class="glass-card">
+                    <div class="section-title">
+                        <span>Active Clinical Bookings</span>
+                        <span class="booking-count-badge" id="active-booking-count">0 Appointments</span>
+                    </div>
+                    <div class="appointments-widget" id="appointments-list">
+                        <p class="empty-state">No active booked appointments.</p>
+                    </div>
+                </div>
+
+                <!-- Outbound Campaigns -->
+                <div class="glass-card">
+                    <div class="section-title">
+                        <span>Outbound Dialing Simulator</span>
+                        <small style="color: var(--accent); font-weight: 600;">Interruption Test</small>
+                    </div>
+                    <div class="campaign-card">
+                        <div class="campaign-grid">
+                            <button class="campaign-btn" onclick="triggerCampaign('reminder')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                                <span>Appointment Reminder</span>
+                            </button>
+                            <button class="campaign-btn" onclick="triggerCampaign('vaccination')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+                                <span>Vaccination Alert</span>
+                            </button>
+                            <button class="campaign-btn" onclick="triggerCampaign('followup')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                <span>Follow-up Call</span>
+                            </button>
+                        </div>
+                        <div class="campaign-active-alert" id="campaign-banner" style="display: none;">
+                            <span>Playing Campaign Call... Speak or click interrupt</span>
+                            <button class="interrupt-btn" id="interrupt-btn">Interrupt Agent</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- State Explorer -->
+                <div class="glass-card">
+                    <div class="section-title">
+                        <span>Dual-Layer Memory Explorer</span>
+                        <small style="color: var(--text-muted); font-size: 11px;">Short & Long-Term</small>
+                    </div>
+                    <div class="debugger-grid">
+                        <div class="debug-subcard">
+                            <h5>Redis Cache <span>Session</span></h5>
+                            <div class="debug-data-list" id="debug-session-list">
+                                <div class="debug-row"><span class="debug-key">Intent</span><span class="debug-val" id="dbg-sess-intent">idle</span></div>
+                                <div class="debug-row"><span class="debug-key">Language</span><span class="debug-val" id="dbg-sess-lang">English</span></div>
+                                <div class="debug-row"><span class="debug-key">Doc Slot</span><span class="debug-val" id="dbg-sess-doc">—</span></div>
+                                <div class="debug-row"><span class="debug-key">Date Slot</span><span class="debug-val" id="dbg-sess-date">—</span></div>
+                                <div class="debug-row"><span class="debug-key">Time Slot</span><span class="debug-val" id="dbg-sess-time">—</span></div>
+                            </div>
+                        </div>
+                        <div class="debug-subcard">
+                            <h5>Persistent DB <span>Patient</span></h5>
+                            <div class="debug-data-list" id="debug-patient-list">
+                                <div class="debug-row"><span class="debug-key">Name</span><span class="debug-val" id="dbg-pat-name">—</span></div>
+                                <div class="debug-row"><span class="debug-key">Language</span><span class="debug-val" id="dbg-pat-lang">—</span></div>
+                                <div class="debug-row"><span class="debug-key">Pref Doctor</span><span class="debug-val" id="dbg-pat-doc">—</span></div>
+                                <div class="debug-row"><span class="debug-key">Hospital</span><span class="debug-val" id="dbg-pat-hosp">—</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reasoning Trace -->
+                    <div class="reasoning-trace-card" id="reasoning-trace-card" style="margin-top: 15px; display: none;">
+                        <h5 class="trace-header">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                            Live Agent Reasoning Trace
+                        </h5>
+                        <div id="reasoning-trace-content" class="reasoning-trace-content">
+                            <div class="reasoning-step">
+                                <div class="reasoning-step-title">Initial Handshake</div>
+                                <div class="reasoning-step-detail">Awaiting input to start tracing reasoning steps...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gemini API Key Config -->
+                    <div class="config-box">
+                        <label class="config-label">Google Gemini API Key (Optional)</label>
                         <div class="config-input-flex">
-                            <input type="text" id="text-query-input" class="text-input" placeholder="Type a message (e.g. 'Book appointment with Dr Patel on Friday at 2 PM')...">
-                            <button id="send-query-btn" class="submit-btn">Send</button>
+                            <input type="password" id="gemini-key-input" class="text-input" placeholder="Paste your GEMINI_API_KEY here...">
+                            <button id="save-key-btn" class="submit-btn save-key-btn">Save Key</button>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Latency breakdown card (Budget < 450ms) -->
-            <div class="glass-card" style="margin-top: 25px;">
-                <div class="section-title">
-                    <span>Performance Metrics & SLA Budget</span>
-                    <small style="color: var(--text-muted); font-size: 11px;">Target: &lt; 450ms</small>
-                </div>
-                
-                <div class="latency-dashboard">
-                    <div class="latency-timeline">
-                        <!-- STT metric -->
-                        <div class="timeline-row">
-                            <span class="timeline-label">Speech-To-Text (STT)</span>
-                            <div class="timeline-bar-wrapper">
-                                <div class="timeline-bar stt" id="bar-stt" style="width: 0%;"></div>
-                            </div>
-                            <span class="timeline-val" id="val-stt">0 ms</span>
-                        </div>
-                        <!-- Language detection -->
-                        <div class="timeline-row">
-                            <span class="timeline-label">Language Detect</span>
-                            <div class="timeline-bar-wrapper">
-                                <div class="timeline-bar lang" id="bar-lang" style="width: 0%;"></div>
-                            </div>
-                            <span class="timeline-val" id="val-lang">0 ms</span>
-                        </div>
-                        <!-- LLM Reasoning -->
-                        <div class="timeline-row">
-                            <span class="timeline-label">Agent LLM & Tools</span>
-                            <div class="timeline-bar-wrapper">
-                                <div class="timeline-bar llm" id="bar-llm" style="width: 0%;"></div>
-                            </div>
-                            <span class="timeline-val" id="val-llm">0 ms</span>
-                        </div>
-                        <!-- TTS synthesis -->
-                        <div class="timeline-row">
-                            <span class="timeline-label">Text-To-Speech (TTS)</span>
-                            <div class="timeline-bar-wrapper">
-                                <div class="timeline-bar tts" id="bar-tts" style="width: 0%;"></div>
-                            </div>
-                            <span class="timeline-val" id="val-tts">0 ms</span>
-                        </div>
-                    </div>
-                    
-                    <div class="sla-badge-box">
-                        <span class="sla-status-text">Total Latency</span>
-                        <div class="sla-value" id="total-latency-val">0ms</div>
-                        <div class="sla-compliant" id="sla-badge">SLA Compliant</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Right Panel: Calendar schedules, Campaign dialing, Debuggers -->
-        <div class="right-panel">
-            
-            <!-- Calendar availability card -->
-            <div class="glass-card calendar-widget">
-                <div class="section-title">
-                    <span>Clinical Schedules & Available Slots</span>
-                    <small style="color: var(--success); font-size: 11px; font-weight: 600;">Live Sync</small>
-                </div>
-                
-                <div class="doctor-filter-tabs" id="doctor-tabs">
-                    <!-- Loaded dynamically via js -->
-                </div>
-                
-                <div class="schedule-grid-container" id="schedule-grid">
-                    <!-- Day rows loaded dynamically -->
-                </div>
-            </div>
-            
-            <!-- Active bookings card -->
-            <div class="glass-card">
-                <div class="section-title">
-                    <span>Active Clinical Bookings</span>
-                    <span class="sla-compliant" id="active-booking-count" style="background: rgba(138,43,226,0.1); border-color: var(--primary); color: #c891ff;">0 Appointments</span>
-                </div>
-                
-                <div class="appointments-widget" id="appointments-list">
-                    <p style="color: var(--text-muted); text-align: center; font-size: 13px; padding: 20px 0;">No active booked appointments.</p>
-                </div>
-            </div>
-
-            <!-- Outbound dialing simulations card -->
-            <div class="glass-card">
-                <div class="section-title">
-                    <span>Proactive Outbound Dialing Simulator</span>
-                    <small style="color: var(--accent); font-weight: 600;">Interruption Test</small>
-                </div>
-                
-                <div class="campaign-card">
-                    <div class="campaign-grid">
-                        <button class="campaign-btn" onclick="triggerCampaign('reminder')">
-                            <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-                            <span>Appt Reminder</span>
-                        </button>
-                        <button class="campaign-btn" onclick="triggerCampaign('vaccination')">
-                            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
-                            <span>Vaccination Alert</span>
-                        </button>
-                        <button class="campaign-btn" onclick="triggerCampaign('followup')">
-                            <svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-9 9H3V8h9v7zm9 0h-7V8h7v7z"/></svg>
-                            <span>Follow-up Call</span>
-                        </button>
-                    </div>
-                    
-                    <div class="campaign-active-alert" id="campaign-banner" style="display: none;">
-                        <span>Playing Campaign Call... Start speaking or click interrupt to break</span>
-                        <button class="interrupt-btn" id="interrupt-btn">Interrupt Agent</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Dual layer State explorer card -->
-            <div class="glass-card">
-                <div class="section-title">
-                    <span>Dual-Layer Memory State Explorer</span>
-                    <small style="color: var(--text-muted); font-size: 11px;">Short &amp; Long-Term</small>
-                </div>
-                
-                <div class="debugger-grid">
-                    <!-- Session memory -->
-                    <div class="debug-subcard">
-                        <h5>Redis Cache <span>Session</span></h5>
-                        <div class="debug-data-list" id="debug-session-list">
-                            <div class="debug-row"><span class="debug-key">Intent</span><span class="debug-val" id="dbg-sess-intent">idle</span></div>
-                            <div class="debug-row"><span class="debug-key">Language</span><span class="debug-val" id="dbg-sess-lang">English</span></div>
-                            <div class="debug-row"><span class="debug-key">Doc Slot</span><span class="debug-val" id="dbg-sess-doc">-</span></div>
-                            <div class="debug-row"><span class="debug-key">Date Slot</span><span class="debug-val" id="dbg-sess-date">-</span></div>
-                            <div class="debug-row"><span class="debug-key">Time Slot</span><span class="debug-val" id="dbg-sess-time">-</span></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Persistent profile memory -->
-                    <div class="debug-subcard">
-                        <h5>Persistent DB <span>Patient</span></h5>
-                        <div class="debug-data-list" id="debug-patient-list">
-                            <div class="debug-row"><span class="debug-key">Name</span><span class="debug-val" id="dbg-pat-name">John Doe</span></div>
-                            <div class="debug-row"><span class="debug-key">Language</span><span class="debug-val" id="dbg-pat-lang">English</span></div>
-                            <div class="debug-row"><span class="debug-key">Pref Doctor</span><span class="debug-val" id="dbg-pat-doc">Dr. Vikram Sen</span></div>
-                            <div class="debug-row"><span class="debug-key">Hospital</span><span class="debug-val" id="dbg-pat-hosp">Wellness Clinic</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Live Agent Reasoning Trace Card -->
-                <div class="reasoning-trace-card" id="reasoning-trace-card" style="margin-top: 15px; display: none;">
-                    <h5 style="margin: 0 0 10px 0; font-size: 13px; color: var(--accent); display: flex; align-items: center; gap: 6px; font-weight: 600;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--accent);"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-                        Live Agent Reasoning Trace
-                    </h5>
-                    <div id="reasoning-trace-content" class="reasoning-trace-content">
-                        <div class="reasoning-step">
-                            <div class="reasoning-step-title">Initial Handshake</div>
-                            <div class="reasoning-step-detail">Awaiting conversational input to start tracing reasoning steps...</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Google Gemini API key configuration -->
-                <div class="config-box">
-                    <label style="font-size: 12px; color: var(--text-muted); font-weight: 500;">Google Gemini API Key Config (Optional)</label>
-                    <div class="config-input-flex">
-                        <input type="password" id="gemini-key-input" class="text-input" placeholder="Paste your GEMINI_API_KEY here...">
-                        <button id="save-key-btn" class="submit-btn" style="background: linear-gradient(135deg, var(--secondary) 0%, rgba(0,242,254,0.6) 100%); color: black; font-weight: 600;">Save Key</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Javascript bindings -->
     <script src="app.js"></script>
 </body>
 </html>
