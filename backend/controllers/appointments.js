@@ -10,7 +10,7 @@ const USER_HEADERS = ["user_id", "name", "place", "age", "registered_at"];
 
 // In-session configurations (e.g. Gemini API Key)
 const globalConfig = {
-    gemini_api_key: ""
+    gemini_api_key: process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || ""
 };
 
 // Ensure users CSV exists

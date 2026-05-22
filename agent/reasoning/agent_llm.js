@@ -4,6 +4,88 @@ const bookingTools = require('../tools/booking_tools');
 const engine = require('../../scheduler/appointment_engine/engine');
 
 /**
+ * Dynamic Real-Time Context Injector for Gemini Handover
+ * Collects complete details about the active patient, doctors, available slots, and active appointments in the system.
+ */
+function getEnrichedSystemPrompt(language, patientProfile) {
+    const basePrompt = systemPrompts.CLINICAL_SYSTEM_PROMPTS[language] || systemPrompts.CLINICAL_SYSTEM_PROMPTS["English"];
+    
+    let userContext = "";
+    if (patientProfile) {
+        userContext = `
+ACTIVE PATIENT CONTEXT:
+- Name: ${patientProfile.name}
+- Age: ${patientProfile.age}
+- Location: ${patientProfile.place}
+- Patient ID: ${patientProfile.patient_id}
+- Preferred Doctor: ${patientProfile.preferred_doctor || "Dr. Aarav Patel"}
+- Preferred Hospital: ${patientProfile.preferred_hospital || "Apollo Clinic"}
+`;
+    } else {
+        userContext = `
+ACTIVE PATIENT CONTEXT: No active patient profile registered yet.
+`;
+    }
+
+    // Load actual DB state
+    const allDoctors = engine.getAllDoctors();
+    const allAppointments = engine.getAllAppointments();
+    const allSchedules = engine.getAllSchedules();
+
+    // Filter appointments for this active patient
+    const patientAppointments = patientProfile 
+        ? allAppointments.filter(a => a.patient_id === patientProfile.patient_id && a.status === "booked")
+        : [];
+
+    let appointmentsContext = "";
+    if (patientAppointments.length > 0) {
+        appointmentsContext = patientAppointments.map(a => 
+            `- Appointment ID: ${a.id}, Doctor: ${a.doctor_name}, Date: ${a.date}, Time: ${a.time}, Status: ${a.status}`
+        ).join("\n");
+    } else {
+        appointmentsContext = "None";
+    }
+
+    // Build doctors and schedules context
+    let clinicContext = `
+CLINIC DOCTORS & SPECIALTIES:
+${allDoctors.map(d => `- ${d.doctor_name} (${d.specialty}) - Languages: ${d.languages.join(", ")}`).join("\n")}
+
+CLINIC CURRENT APPOINTMENTS (All Booked Appointments in the System):
+${allAppointments.map(a => `- App ID: ${a.id}, Patient: ${a.patient_name}, Doctor: ${a.doctor_name}, Date: ${a.date}, Time: ${a.time}, Status: ${a.status}`).join("\n")}
+
+DOCTOR AVAILABILITY (Remaining available time slots for booking):
+${allSchedules.map(s => {
+    const doc = allDoctors.find(d => d.doctor_id === s.doctor_id);
+    const docName = doc ? doc.doctor_name : s.doctor_id;
+    return `- ${docName} on ${s.date}: Available slots: [${s.available_slots.join(", ")}]`;
+}).join("\n")}
+`;
+
+    const finalInstructions = `
+${basePrompt}
+
+=========================================
+REAL-TIME APPLICATION & USER CONTEXT:
+${userContext}
+PATIENT'S ACTIVE BOOKINGS:
+${appointmentsContext}
+${clinicContext}
+=========================================
+
+IMPORTANT INSTRUCTIONS FOR GENERAL QUERIES & SCHEDULING:
+1. When asked about patient profile (name, age, city/place), answer precisely using the ACTIVE PATIENT CONTEXT.
+2. When asked about doctor schedules, available time slots, or specialties, consult the DOCTOR AVAILABILITY section above and answer accurately. Do NOT invent/hallucinate available slots that are not listed or are already taken.
+3. If the patient asks "Do I have any appointments?", "Show my bookings", or similar, consult the PATIENT'S ACTIVE BOOKINGS section and list them with their Appointment IDs, dates, and times.
+4. If a patient wants to book, reschedule, or cancel, use the provided tools (book_appointment, reschedule_appointment, cancel_appointment). Ensure that you pass the exact patient_id ("${patientProfile ? patientProfile.patient_id : "pat_1"}") and map doctor name/specialty to doctor_id correctly.
+5. If the patient asks general questions (e.g. about Apollo Clinic, health tips, or anything else), answer friendly, professionally, and concisely in under 2-3 short sentences.
+6. Always greet the patient by their name ("${patientProfile ? patientProfile.name : "Patient"}").
+`;
+
+    return finalInstructions;
+}
+
+/**
  * Main Reasoning Entry Point
  * Handles both Live Gemini Tool-calling and Local State-machine Fallback.
  * Returns { reply, reasoningTrace, latency, actionResult }
@@ -16,12 +98,12 @@ async function runAgentReasoning(text, sessionState, patientProfile, apiKey) {
     
     // Sync language state
     const language = sessionState.current_language || "English";
-    const systemPrompt = systemPrompts.CLINICAL_SYSTEM_PROMPTS[language] || systemPrompts.CLINICAL_SYSTEM_PROMPTS["English"];
+    const enrichedPrompt = getEnrichedSystemPrompt(language, patientProfile);
     const patientId = patientProfile ? patientProfile.patient_id : "pat_1";
 
     reasoningTrace.push({
         step: "Language & Context Anchor",
-        detail: `Detected Language: ${language}. Loaded System Prompt for Apollo Clinic Receptionist.`
+        detail: `Detected Language: ${language}. Enriched real-time user/clinic data in system prompt.`
     });
 
     if (apiKey) {
@@ -31,7 +113,7 @@ async function runAgentReasoning(text, sessionState, patientProfile, apiKey) {
         });
         
         try {
-            const result = await executeGeminiToolCalling(text, sessionState, systemPrompt, bookingTools.TOOL_SCHEMAS, patientProfile, apiKey, reasoningTrace);
+            const result = await executeGeminiToolCalling(text, sessionState, enrichedPrompt, bookingTools.TOOL_SCHEMAS, patientProfile, apiKey, reasoningTrace);
             reply = result.reply;
             actionResult = result.actionResult;
         } catch (e) {
