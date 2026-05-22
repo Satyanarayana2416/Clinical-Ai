@@ -33,7 +33,7 @@ const websocket = require('./backend/api/websocket');
 const dbStore = require('./scheduler/appointment_engine/db_store');
 const dbMemory = require('./memory/persistent_memory/db_memory');
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 // Initialize Database & Seeding
 dbStore.initDb();
@@ -53,11 +53,11 @@ const server = http.createServer((req, res) => {
 // Attach Real-Time WebSocket Channel
 websocket.initializeWebSocket(server);
 
-// Boot Server on Localhost
-server.listen(PORT, '127.0.0.1', () => {
+// Boot Server on All Interfaces (Required for Render)
+server.listen(PORT, '0.0.0.0', () => {
     console.log(`=============================================================`);
     console.log(`🚀 Clinical Voice AI Agent Server successfully launched!`);
-    console.log(`🔗 Web Dashboard URL: http://127.0.0.1:${PORT}`);
-    console.log(`📡 WebSocket Channel: ws://127.0.0.1:${PORT}/ws`);
+    console.log(`🔗 Web Dashboard URL: http://localhost:${PORT}`);
+    console.log(`📡 WebSocket Channel: ws://localhost:${PORT}/ws`);
     console.log(`=============================================================`);
 });
