@@ -3,6 +3,31 @@
 // ==============================================================
 
 const http = require('http');
+const fs = require('fs');
+const path = require('path');
+
+// 🔌 Zero-dependency environment variable loader
+function loadEnv() {
+    const envPath = path.join(__dirname, '.env');
+    if (fs.existsSync(envPath)) {
+        const lines = fs.readFileSync(envPath, 'utf8').split(/\r?\n/);
+        lines.forEach(line => {
+            const trimmed = line.trim();
+            if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
+                const index = trimmed.indexOf('=');
+                const key = trimmed.substring(0, index).trim();
+                let val = trimmed.substring(index + 1).trim();
+                if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+                    val = val.substring(1, val.length - 1);
+                }
+                process.env[key] = val;
+            }
+        });
+        console.log(`[Env] Loaded configuration parameters from local .env file.`);
+    }
+}
+loadEnv();
+
 const apiRoutes = require('./backend/routes/api_routes');
 const websocket = require('./backend/api/websocket');
 const dbStore = require('./scheduler/appointment_engine/db_store');
